@@ -5,8 +5,8 @@ import pyspark.sql.functions as pys_functions
 from zipfile import ZipFile
 
 ## GLOBAL VARIABLES
-input_files_location = "../input-files"
-zip_file_path = "../input-files.zip"
+input_files_location = "input-files"
+zip_file_path = "input-files.zip"
 
 ## POSTGRESS CONNECTION
 pg_database = "challenge"
@@ -16,7 +16,7 @@ pg_port = "5432"
 pg_url = "jdbc:postgresql://{0}:{1}/{2}".format(pg_host, pg_port, pg_database)
 pgOptions = {
     "user" : "postgres",
-    "password" : "**********",
+    "password" : "*******",
     "driver": "org.postgresql.Driver"
 }
 
@@ -112,7 +112,7 @@ def load_open_events_into_pg():
 
     ## Create historical table and write into it if there were duplicates
     if(hist_open_events_df.count() > 0):
-        ps_table = "engagement.open_events_historic"
+        ps_table = "public.open_events_historic"
         create_postgress_table(ps_table, hist_open_events_df.columns, ["varchar(64)", "timestamp", "varchar(64)", "json", "int"], ["not null", "not null", "not null", "", "not null"])
         write_df_to_ps_table(hist_open_events_df, ps_table)
 
@@ -146,7 +146,7 @@ def load_receipt_events_into_pg():
     write_df_to_ps_table(receipt_events_df, ps_table)
 
     if(hist_receipt_events_df.count() > 0):
-        ps_table = "engagement.receipt_events_historic"
+        ps_table = "public.receipt_events_historic"
         create_postgress_table(ps_table, hist_receipt_events_df.columns, ["varchar(64)", "timestamp", "varchar(64)", "decimal(10,2)", "varchar(64)", "int"], ["not null", "not null", "not null", "not null", "not null", "not null"])
         write_df_to_ps_table(hist_receipt_events_df, ps_table)
 
